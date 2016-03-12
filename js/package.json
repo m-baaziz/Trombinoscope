@@ -4,7 +4,7 @@
   "description": "A trombinoscope application",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --progress --profile --colors"
+    "start": "webpack --progress --profile --colors && uglifyjs .bundle.js --compress --mangle -o .bundle.js"
   },
   "dependencies": {
     "babel-plugin-module-alias": "^1.2.0",
