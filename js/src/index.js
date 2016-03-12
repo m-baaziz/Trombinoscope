@@ -10,6 +10,8 @@ class App extends Component {
 		return (
 			<div>
 				This is the react part !!
+				<br />
+				TEST TEST
 			</div>
 		);
 	}

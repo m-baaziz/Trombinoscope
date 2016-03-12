@@ -2,7 +2,7 @@
   "name": "node-js-training",
   "version": "0.1.0",
   "description": "A trombinoscope application",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "start": "webpack --progress --profile --colors && uglifyjs .bundle.js --compress --mangle -o .bundle.js"
   },

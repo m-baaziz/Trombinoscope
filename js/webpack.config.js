@@ -4,7 +4,7 @@ var webpack = require('webpack');
 module.exports = {
   devtool: 'eval',
   entry: [
-    './index.js'
+    './src/index.js'
   ],
   output: { path: __dirname, filename: '.bundle.js' },
   plugins: [
