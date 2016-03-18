@@ -34,9 +34,10 @@ function VerifForm(form){
 
 	if(name_verif != true){
 		if (document.getElementById("name").value.match(/^[A-Za-z]+$/){
-			
+			document.getElementById('msg').innerHTML = '<div class="alert alert-error" role="alert"><b>Attention !</b> Veuillez seulement entrer des lettres</div>';	
+		}else{
+			document.getElementById('msg').innerHTML = '<div class="alert alert-warning" role="alert"><b>Attention !</b> veuillez rentrer un nom correcte</div>';	
 		}
-		document.getElementById('msg').innerHTML = '<div class="alert alert-warning" role="alert"><b>Attention !</b> veuillez rentrer un nom correcte</div>';	
 	}else{
 		if(fname_verif != true){
 			document.getElementById('msg').innerHTML = '<div class="alert alert-warning" role="alert"><b>Attention !</b> veuillez rentrer un prénom correcte</div>';	
