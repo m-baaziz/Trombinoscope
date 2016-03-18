@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import {Link} from 'react-router';
 
+import SearchBar from '../components/SearchBar.react';
+
 import {requestUsers} from '../actions/ApiActions';
 
 class App extends Component {
@@ -22,7 +24,8 @@ class App extends Component {
 			<div>
 				This is the react part !!
 				<br />
-				TEST TEST
+				TEST TEST 
+				<SearchBar />
 				<br />
 				<Link to='show'>
 					Click
