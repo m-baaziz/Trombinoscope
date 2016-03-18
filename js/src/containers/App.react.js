@@ -21,12 +21,11 @@ class App extends Component {
 	render() {
 		console.log(this.props.users);
 		return (
-			<div>
-				This is the react part !!
-				<br />
-				TEST TEST 
-				<SearchBar />
-				<br />
+			<div className="container-fluid">
+				<div className="page-header"><h1 className="text-left">Trombinoscope SR03</h1></div>
+				<div className="res_containt">
+					<SearchBar />
+				</div>
 				<Link to='show'>
 					Click
 				</Link>
