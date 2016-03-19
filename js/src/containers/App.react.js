@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import {Link} from 'react-router';
 
 import SearchBar from '../components/SearchBar.react';
+import UsersTable from '../components/UsersTable.react';
 
 import {requestUsers} from '../actions/ApiActions';
 
@@ -23,6 +24,7 @@ class App extends Component {
 	}
 
 	render() {
+		console.log(this.props.users);
 		return (
 			<div className="container-fluid">
 				<div className="page-header">
@@ -30,6 +32,7 @@ class App extends Component {
 				</div>
 				<div className="res_containt">
 					<SearchBar onSubmit={this.requestUsers} />
+					<UsersTable users={this.props.users} />
 				</div>
 				<Link to='show'>
 					Click
