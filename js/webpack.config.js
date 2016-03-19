@@ -6,7 +6,7 @@ module.exports = {
   entry: [
     './src/containers/Root.react.js'
   ],
-  output: { path: __dirname, filename: '.bundle.js' },
+  output: { path: __dirname, filename: '../app/assets/javascript/.bundle.js' },
   plugins: [
     new webpack.HotModuleReplacementPlugin()
   ],

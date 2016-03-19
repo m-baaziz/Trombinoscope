@@ -4,11 +4,12 @@
   "description": "A trombinoscope application",
   "main": "./src/index.js",
   "scripts": {
-    "start": "webpack --progress --profile --colors && uglifyjs .bundle.js --compress --mangle -o .bundle.js"
+    "start": "webpack --progress --profile --colors && uglifyjs ../app/assets/javascript/.bundle.js --compress --mangle -o ../app/assets/javascript/.bundle.js"
   },
   "dependencies": {
     "babel-plugin-module-alias": "^1.2.0",
     "keymirror": "^0.1.1",
+    "lodash": "^4.6.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-redux": "^4.4.1",

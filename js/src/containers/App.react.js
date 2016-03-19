@@ -11,20 +11,25 @@ class App extends Component {
 
 	constructor(props) {
 		super(props);
+		this.requestUsers = this.requestUsers.bind(this);
 	}
 
 	componentDidMount() {
 		console.log('mount');
-		this.props.dispatch(requestUsers("mister", "tchiky"));
+	}
+
+	requestUsers(firstName, lastName) {
+		this.props.dispatch(requestUsers(firstName, lastName));
 	}
 
 	render() {
-		console.log(this.props.users);
 		return (
 			<div className="container-fluid">
-				<div className="page-header"><h1 className="text-left">Trombinoscope SR03</h1></div>
+				<div className="page-header">
+					<h1 className="text-left">Trombinoscope</h1>
+				</div>
 				<div className="res_containt">
-					<SearchBar />
+					<SearchBar onSubmit={this.requestUsers} />
 				</div>
 				<Link to='show'>
 					Click
