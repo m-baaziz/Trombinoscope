@@ -11,17 +11,18 @@ class UsersTable extends Component {
 
 	buildUserCell(user) {
 		return (
-			<div key={user.login} className={`col-md-${_.floor(12/USERS_PER_ROW)}`}>
-				<img src={`https://demeter.utc.fr/portal/pls/portal30/portal30.get_photo_utilisateur_mini?username=${user.login}`} />
+			<div key={user.login} className={`user-cell col-xs-${_.floor(12/USERS_PER_ROW)}`}>
+				<img src={`https://demeter.utc.fr/portal/pls/portal30/portal30.get_photo_utilisateur_mini?username=${user.login}`} alt='Photo indisponible' />
 			</div>
 		);
 	}
 
 	render() {
-		const usersChunks = _.chunk(this.props.users, USERS_PER_ROW);
+		const {users, options} = this.props;
+		const usersChunks = _.chunk(users, USERS_PER_ROW);
 		const buildUsersLine = chunk => {
 			return _.map(chunk, user => {
-				return this.buildUserCell(user);
+				return _.includes(options, "photo") ? this.buildUserCell(user) : null;
 			});
 		}
 		const rows = _.map(usersChunks, (chunk, index) => {

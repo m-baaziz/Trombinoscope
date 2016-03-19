@@ -6,5 +6,11 @@ module.exports = {
 	 		type: ActionTypes.RECEIVE_USERS,
 	 		users
 	 	}
+	 },
+	 swapOption: (option) => {
+	 	return {
+	 		type: ActionTypes.SWAP_OPTION,
+	 		option
+	 	}
 	 }
 }

@@ -8,7 +8,13 @@ class SearchBar extends Component {
 		this.setLastName = this.setLastName.bind(this);
 		this.setFirstName = this.setFirstName.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
-		this.state = {firstName: null, lastName: null}
+		this.onCheckboxChange = this.onCheckboxChange.bind(this);
+		const {firstName, lastName, options} = this.props;
+		this.state = {firstName, lastName, options};
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState({options: nextProps.options});
 	}
 
 	onSubmit(e) {
@@ -25,9 +31,12 @@ class SearchBar extends Component {
 		this.setState({firstName: e.target.value});
 	}
 
+	onCheckboxChange(e) {
+		this.props.onOptionCheck(e.target.value);
+	}
 
 	render() {
-		const {firstName, lastName} = this.state;
+		const {firstName, lastName, options} = this.state;
 		return (
 			<div className="form jumbotron">
 				<form className="form-inline" onSubmit={this.onSubmit}>
@@ -35,17 +44,24 @@ class SearchBar extends Component {
 						<div className="row">
 							
 							<div id="div-name" className="form-group  has-feedback">
-  							<input type="text" className="form-control" placeholder="Nom" onChange={this.setLastName} />	
+  							<input type="text" className="form-control" placeholder="Nom" value={lastName} onChange={this.setLastName} />	
 								<span id="icon-name" className="glyphicon glyphicon-pencil form-control-feedback" ariaHidden="true"></span>  								  						
 							</div>
 							
 							<div id="div-fname" className="form-group  has-feedback">
-  							<input type="text" className="form-control" placeholder="Prénom" onChange={this.setFirstName} />		
+  							<input type="text" className="form-control" placeholder="Prénom" value={firstName} onChange={this.setFirstName} />		
 								<span className="glyphicon glyphicon-pencil form-control-feedback" ariaHidden="true"></span>  								  						  								
 							</div>
 																											
 							<input type="submit" value="Valider" className="btn btn-success" disabled={_.isEmpty(firstName) && _.isEmpty(lastName)} />
 							
+						</div>
+						<div className='row'>
+							<div className="checkbox col-md-offset-4 col-md-4">
+						   <label>
+						     <input type="checkbox" value="photo" checked={_.includes(options, "photo")} onChange={this.onCheckboxChange} /> Photo
+						   </label>
+						 	</div>
 						</div>
 					</div>
 				</form>
