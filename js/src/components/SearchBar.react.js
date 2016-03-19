@@ -37,6 +37,15 @@ class SearchBar extends Component {
 
 	render() {
 		const {firstName, lastName, options} = this.state;
+		const buildCheckBox = (name, value) => {
+			return (
+				<div className="checkbox">
+			   <label>
+			     <input type="checkbox" value={value} checked={_.includes(options, value)} onChange={this.onCheckboxChange} /> {name}
+			   </label>
+			 	</div>
+			);
+		}
 		return (
 			<div className="form jumbotron">
 				<form className="form-inline" onSubmit={this.onSubmit}>
@@ -57,11 +66,10 @@ class SearchBar extends Component {
 							
 						</div>
 						<div className='row'>
-							<div className="checkbox col-md-offset-4 col-md-4">
-						   <label>
-						     <input type="checkbox" value="photo" checked={_.includes(options, "photo")} onChange={this.onCheckboxChange} /> Photo
-						   </label>
-						 	</div>
+							{buildCheckBox('photo', 'photo')}
+							{buildCheckBox('structure', 'structure')}
+							{buildCheckBox('nom', 'nom')}
+							{buildCheckBox('e-mail', 'mail')}
 						</div>
 					</div>
 				</form>

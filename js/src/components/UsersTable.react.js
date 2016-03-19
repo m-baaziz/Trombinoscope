@@ -7,12 +7,25 @@ class UsersTable extends Component {
 
 	constructor(props) {
 		super(props);
+		this.buildUserCell = this.buildUserCell.bind(this);
 	}
 
 	buildUserCell(user) {
+		const { options } = this.props;
 		return (
 			<div key={user.login} className={`user-cell col-xs-${_.floor(12/USERS_PER_ROW)}`}>
-				<img src={`https://demeter.utc.fr/portal/pls/portal30/portal30.get_photo_utilisateur_mini?username=${user.login}`} alt='Photo indisponible' />
+				{
+					_.includes(options, "photo") ? 
+					(<div><img src={`https://demeter.utc.fr/portal/pls/portal30/portal30.get_photo_utilisateur_mini?username=${user.login}`} alt='Photo indisponible' /></div>) :
+					null
+				}
+				{
+					_.map(_.omit(options, 'photo'), (option, index) => {
+						return (
+							<div key={index}>{user[option]}</div>
+						);
+					})
+				}
 			</div>
 		);
 	}
@@ -22,7 +35,7 @@ class UsersTable extends Component {
 		const usersChunks = _.chunk(users, USERS_PER_ROW);
 		const buildUsersLine = chunk => {
 			return _.map(chunk, user => {
-				return _.includes(options, "photo") ? this.buildUserCell(user) : null;
+				return this.buildUserCell(user);
 			});
 		}
 		const rows = _.map(usersChunks, (chunk, index) => {
