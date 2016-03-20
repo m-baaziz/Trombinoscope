@@ -16,10 +16,13 @@
 	border-radius: 10px;
 	
 }
-
 .photo{
 	margin: 0 auto;
 	text-align: center;	
+}
+.photo img {
+	width: 98px;
+	height: 122px;
 }
 .test {
 	background-color: red;
@@ -29,5 +32,8 @@
 }
 .user-cell img {
 	border: 1px solid;
-	border-radius: 5px;
+	border-radius: 6px;
+}
+.cursor {
+	cursor: pointer;
 }

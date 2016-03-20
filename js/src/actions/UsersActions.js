@@ -7,6 +7,12 @@ module.exports = {
 	 		users
 	 	}
 	 },
+	 selectUser: (user) => {
+	 	return {
+	 		type: ActionTypes.SELECT_USER,
+	 		user
+	 	}
+	 },
 	 swapOption: (option) => {
 	 	return {
 	 		type: ActionTypes.SWAP_OPTION,

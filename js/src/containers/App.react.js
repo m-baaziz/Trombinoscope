@@ -8,7 +8,7 @@ import SearchBar from '../components/SearchBar.react';
 import UsersTable from '../components/UsersTable.react';
 
 import {requestUsers} from '../actions/ApiActions';
-import {swapOption} from '../actions/UsersActions';
+import {swapOption, selectUser} from '../actions/UsersActions';
 
 class App extends Component {
 
@@ -17,6 +17,7 @@ class App extends Component {
 		context.router;
 		this.requestUsers = this.requestUsers.bind(this);
 		this.swapOption = this.swapOption.bind(this);
+		this.selectUser = this.selectUser.bind(this);
 	}
 
 	componentDidMount() {
@@ -31,6 +32,10 @@ class App extends Component {
 		this.context.router.replace(`?first_name=${_.toString(firstName)}&last_name=${_.toString(lastName)}`, null)
 	}
 
+	selectUser(user) {
+		this.props.dispatch(selectUser(user));
+	}
+
 	swapOption(option) {
 		this.props.dispatch(swapOption(option));
 	}
@@ -38,18 +43,20 @@ class App extends Component {
 	render() {
 		const {first_name, last_name} = this.props.location.query;
 		const {users, options} = this.props;
+		const onTitleClick = (e) => {
+			window.location.href = "/";
+		}
 		return (
 			<div className="container-fluid">
-				<div className="page-header">
-					<h1 className="text-left">Trombinoscope</h1>
+				<div className="page-header row">
+					<div onClick={onTitleClick} className='cursor col-md-3'>
+						<h1 className="text-left">Trombinoscope</h1>
+					</div>
 				</div>
 				<div className="res_containt">
 					<SearchBar firstName={first_name} lastName={last_name} options={options} onOptionCheck={this.swapOption} onSubmit={this.requestUsers} />
-					<UsersTable users={users} options={options} />
+					<UsersTable users={users} options={options} onUserClick={this.selectUser} />
 				</div>
-				<Link to='show'>
-					Click
-				</Link>
 			</div>
 		);
 	}
@@ -61,7 +68,7 @@ App.contextTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    users: state.users,
+    users: state.users.all,
     options: state.options
   }
 }

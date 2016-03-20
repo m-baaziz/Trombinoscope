@@ -8,6 +8,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
 import App from './App.react';
+import Profile from './Profile.react';
 
 const store = createStore(
   reducer,
@@ -21,9 +22,8 @@ const history = syncHistoryWithStore(browserHistory, store);
 ReactDOM.render(
 	<Provider store={store}>
 		<Router history={history}>
-			<Route path="/" component={App}>
-	      <Route path="show" component={App}/>
-     	</Route>
+			<Route path="/" component={App} />
+      <Route path="/profile" component={Profile}/>
     </Router>
   </Provider>,
 	document.getElementById('react')

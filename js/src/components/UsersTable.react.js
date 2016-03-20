@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router';
 import _ from 'lodash';
 
 const USERS_PER_ROW = 4;
@@ -10,13 +11,23 @@ class UsersTable extends Component {
 		this.buildUserCell = this.buildUserCell.bind(this);
 	}
 
+	onImgError(e) {
+		e.target.src = "../../app/assets/images/profil.jpg";
+	}
+
 	buildUserCell(user) {
 		const { options } = this.props;
+		const lastName =  _.lowerCase(_.trim(_.takeWhile(user.nom.split(' '), block => {return block == _.toUpper(block)}).join('')));
+		const firstName = user.prenom;
 		return (
 			<div key={user.login} className={`user-cell col-xs-${_.floor(12/USERS_PER_ROW)}`}>
 				{
 					_.includes(options, "photo") ? 
-					(<div><img src={`https://demeter.utc.fr/portal/pls/portal30/portal30.get_photo_utilisateur_mini?username=${user.login}`} alt='Photo indisponible' /></div>) :
+					(<div className="photo">
+						<Link to={`profile?first_name=${firstName}&last_name=${lastName}`} onClick={this.props.onUserClick.bind(null, user)}>
+							<img src={`https://demeter.utc.fr/portal/pls/portal30/portal30.get_photo_utilisateur_mini?username=${user.login}`} onError={this.onImgError} />
+						</Link>
+					</div>) :
 					null
 				}
 				{
