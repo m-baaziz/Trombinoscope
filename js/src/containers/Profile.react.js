@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import {requestUsers} from '../actions/ApiActions';
+import {requestUsersByIdentity} from '../actions/ApiActions';
 
 class Profile extends Component {
 
@@ -13,7 +13,7 @@ class Profile extends Component {
 	componentDidMount() {
 		const {dispatch, user, location} = this.props;
 		if (_.isEmpty(user.nom)) {
-			dispatch(requestUsers(location.query.first_name, location.query.last_name));
+			dispatch(requestUsersByIdentity(location.query.first_name, location.query.last_name));
 		}
 	}
 
@@ -26,10 +26,10 @@ class Profile extends Component {
 		const nameArray = user.nom.split(' ');
 		const lastName = _.remove(nameArray, block => {return block == _.toUpper(block)}).join('')
 		const firstName = nameArray.join(' ');
-		const infos = _.map(_.omit(_.keys(user), ["nom", "prenom", "photo"]), (key, index) => {
+		const infos = _.map(_.keys(_.omit(user, ["nom", "prenom", "photo"])), (key, index) => {
 										return (
 											<p key={index}>
-												{key}: {user[key]}
+												{key == "sousStructure" ? "sous-structure" : key}: {user[key]}
 											</p>
 										);
 									});

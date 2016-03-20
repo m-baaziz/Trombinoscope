@@ -1,9 +1,24 @@
-import {getUsers} from '../utils/ApiUtils';
+import {getUsersByIdentity, getUsersByStructures, getStructures, getSubStructures} from '../utils/ApiUtils';
 
 module.exports = {
-	requestUsers: (firstName, lastName) => {
+	requestUsersByIdentity: (firstName, lastName) => {
 		return (dispatch) => {
-			getUsers(dispatch, firstName, lastName);
+			getUsersByIdentity(dispatch, firstName, lastName);
+		}
+	},
+	requestUsersByStructures: (primary, secondary) => {
+		return (dispatch) => {
+			getUsersByStructures(dispatch, primary, secondary);
+		}
+	},
+	requestStructures: () => {
+		return (dispatch) => {
+			getStructures(dispatch);
+		}
+	},
+	requestSubStructures: (structId) => {
+		return (dispatch) => {
+			getSubStructures(dispatch, structId);
 		}
 	}
 }

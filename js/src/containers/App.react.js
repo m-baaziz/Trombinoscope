@@ -7,33 +7,63 @@ import _ from 'lodash';
 import SearchBar from '../components/SearchBar.react';
 import UsersTable from '../components/UsersTable.react';
 
-import {requestUsers} from '../actions/ApiActions';
+import {requestUsersByIdentity, requestUsersByStructures, requestStructures, requestSubStructures} from '../actions/ApiActions';
 import {swapOption, selectUser} from '../actions/UsersActions';
+import {clearSubStructures} from "../actions/StructuresActions";
 
 class App extends Component {
 
 	constructor(props, context) {
 		super(props);
 		context.router;
-		this.requestUsers = this.requestUsers.bind(this);
+		this.requestUsersByIdentity = this.requestUsersByIdentity.bind(this);
+		this.requestUsersByStructures = this.requestUsersByStructures.bind(this);
+		this.requestSubStructures = this.requestSubStructures.bind(this);
 		this.swapOption = this.swapOption.bind(this);
 		this.selectUser = this.selectUser.bind(this);
 	}
 
 	componentDidMount() {
-		const {first_name, last_name} = this.props.location.query;
+		const {dispatch} = this.props;
+		const {first_name, last_name, primary_struct, secondary_struct} = this.props.location.query;
 		if (!_.isEmpty(first_name) || !_.isEmpty(last_name)) {
-			this.props.dispatch(requestUsers(first_name, last_name));
+			dispatch(requestUsersByIdentity(first_name, last_name));
+		}
+		dispatch(requestStructures());
+		if (!_.isEmpty(primary_struct)) {
+			dispatch(requestSubStructures(primary_struct));
+			if (!_.isEmpty(secondary_struct)) {
+				dispatch(requestUsersByStructures(primary_struct, secondary_struct));
+			}
 		}
 	}
 
-	requestUsers(firstName, lastName) {
-		this.props.dispatch(requestUsers(firstName, lastName));
+	componentWillUnmount() {
+		this.props.dispatch(clearSubStructures());
+	}
+
+	componentwillReceiveProps(nextProps) {
+		if (_.isEmpty(nextProps.subStructures) && !_.isEmpty(nextProps.structures)) {
+			this.props.dispatch(requestSubStructures(nextProps.structures[0].structNomId));
+		}
+	}
+
+	requestUsersByIdentity(firstName, lastName) {
+		this.props.dispatch(requestUsersByIdentity(firstName, lastName));
 		this.context.router.replace(`?first_name=${_.toString(firstName)}&last_name=${_.toString(lastName)}`, null)
+	}
+
+	requestUsersByStructures(primary, secondary) {
+		this.props.dispatch(requestUsersByStructures(primary, secondary));
+		this.context.router.replace(`?primary_struct=${_.toString(primary)}&secondary_struct=${_.toString(secondary)}`, null)
 	}
 
 	selectUser(user) {
 		this.props.dispatch(selectUser(user));
+	}
+
+	requestSubStructures(structId) {
+		this.props.dispatch(requestSubStructures(structId));
 	}
 
 	swapOption(option) {
@@ -41,8 +71,8 @@ class App extends Component {
 	}
 
 	render() {
-		const {first_name, last_name} = this.props.location.query;
-		const {users, options} = this.props;
+		const {first_name, last_name, primary_struct, secondary_struct} = this.props.location.query;
+		const {users, options, structures, subStructures} = this.props;
 		const onTitleClick = (e) => {
 			window.location.href = "/";
 		}
@@ -54,7 +84,18 @@ class App extends Component {
 					</div>
 				</div>
 				<div className="res_containt">
-					<SearchBar firstName={first_name} lastName={last_name} options={options} onOptionCheck={this.swapOption} onSubmit={this.requestUsers} />
+					<SearchBar
+						firstName={first_name}
+						lastName={last_name} options={options}
+						structures={structures}
+						subStructures={subStructures}
+						selectedStructure={primary_struct}
+						selectedSecondaryStructure={secondary_struct}
+						onOptionCheck={this.swapOption}
+						onStructureSelect={this.requestSubStructures}
+						onSubmitIdentity={this.requestUsersByIdentity}
+						onSubmitStructures={this.requestUsersByStructures}
+					/>
 					<UsersTable users={users} options={options} onUserClick={this.selectUser} />
 				</div>
 			</div>
@@ -69,7 +110,9 @@ App.contextTypes = {
 const mapStateToProps = (state) => {
   return {
     users: state.users.all,
-    options: state.options
+    options: state.options,
+    structures: state.structures.primary,
+    subStructures: state.structures.secondary
   }
 }
 
