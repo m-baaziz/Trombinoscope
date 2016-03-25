@@ -16,7 +16,7 @@ class SearchBar extends Component {
 		const {firstName, lastName, options, selectedStructure, selectedSecondaryStructure} = this.props;
 		const searchType = _.includes(window.location.search, "struct") ? "structure" : "identity";
 		this.state = {
-			firstName: "", lastName: "", options, searchType, 
+			firstName: firstName || "", lastName: lastName || "", options, searchType, 
 			primaryStructure: selectedStructure || null,
 			secondaryStructure: selectedSecondaryStructure || 0};
 	}
@@ -67,12 +67,22 @@ class SearchBar extends Component {
 	}
 
 	messageContent() {
-		// const {firstName, lastName} = this.state;
-		// let invalidFields = [];
-		// const isFieldValid = (field) => {
-		// 	if (_.toInteger)
-		// }
-		// if (firstName)
+		const {firstName, lastName} = this.state;
+		let invalidFields = [];
+		const regExp = /^[A-Za-z]+$/;
+		if (!firstName.match(regExp)) {
+			invalidFields.push("Prénom");
+		}
+		if (!lastName.match(regExp)) {
+			invalidFields.push("Nom");
+		}
+		const errors = _.map(invalidFields, (field, index) => {
+			return (
+				<div className="alert alert-error" role="alert"><b>Attention !</b> Le {field} ne doit contenir que des lettres</div>
+			)
+		})
+
+		return errors;
 	}
 
 	render() {
@@ -97,17 +107,18 @@ class SearchBar extends Component {
 		}
 
 		const textInputs = (
-			<div>
-				<div id="div-name" className="form-group has-feedback">
+			[
+				<div id="div-name" key='1' className="form-group has-feedback">
 					<input type="text" className="form-control" placeholder="Nom" value={lastName} onChange={this.setLastName} />	
-					<span id="icon-name" className="glyphicon glyphicon-pencil form-control-feedback" ariaHidden="true"></span>  								  						
-				</div>
-				
-				<div id="div-fname" className="form-group has-feedback">
+					<span id="icon-name" className="glyphicon glyphicon-pencil form-control-feedback" ariaHidden="true"></span>
+					<span id="input-name" className="sr-only">(success)</span>
+				</div>,
+				<div id="div-fname" key='2' className="form-group has-feedback">
 					<input type="text" className="form-control" placeholder="Prénom" value={firstName} onChange={this.setFirstName} />		
 					<span className="glyphicon glyphicon-pencil form-control-feedback" ariaHidden="true"></span>  								  						  								
+					<span id="input-fname" className="sr-only">(success)</span>
 				</div>
-			</div>
+			]
 		);
 
 		const selectInputs = (
@@ -133,32 +144,33 @@ class SearchBar extends Component {
 	    </div>
 		)
 
+		const isSubmitDisabled = () => {
+			return !_.isEmpty(this.messageContent() || (_.isEmpty(firstName) && _.isEmpty(lastName)) || (!_.isEmpty(firstName) && firstName.length < 2) || (!_.isEmpty(lastName) && lastName.length < 2)) && searchType == "identity";
+		}
+
 		return (
 			<div className="form jumbotron">
-				<div className="form-group">
-					{buildRadio("Identité", "identity")}
-					{buildRadio("Structure", "structure")}
-				</div>
-				<form className="form-inline" onSubmit={this.onSubmit}>
+				<div className="row">
 					<div className="form-group">
-						<div className="row">
-
-							{searchType == "identity" ? textInputs : selectInputs}
-																											
-							<input type="submit" value="Valider" style={{marginLeft: '3px'}} className="btn btn-success" 
-								disabled={((!_.isEmpty(firstName) && !_.isEmpty(lastName)) || (!_.isEmpty(firstName) && firstName.length < 2) || (!_.isEmpty(lastName) && lastName.length < 2)) && searchType == "identity"}
-							/>
-							
-						</div>
+						{buildRadio("Identité", "identity")}
+						{buildRadio("Structure", "structure")}
+					</div>
+					<form className="form-inline" onSubmit={this.onSubmit}>
+						{searchType == "identity" ? textInputs : selectInputs}
+																										
+						<input type="submit" value="Valider" style={{marginLeft: '3px'}} className={`btn ${isSubmitDisabled() ? '' : 'btn-success'}`}
+							disabled={isSubmitDisabled()}
+						/>
 						<div className='row'>
 							{buildCheckBox('photo', 'photo')}
 							{buildCheckBox('structure', 'structure')}
 							{buildCheckBox('nom', 'nom')}
 							{buildCheckBox('e-mail', 'mail')}
 						</div>
-					</div>
-				</form>
+					</form>
+				</div>
 				<div id="msg">
+					{this.messageContent()}
 				</div>
 			</div>
 		);
