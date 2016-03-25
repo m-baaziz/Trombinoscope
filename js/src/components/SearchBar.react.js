@@ -12,10 +12,11 @@ class SearchBar extends Component {
 		this.onRadioChange = this.onRadioChange.bind(this);
 		this.onStructureSelect = this.onStructureSelect.bind(this);
 		this.onSubStructureSelect = this.onSubStructureSelect.bind(this);
+		this.messageContent = this.messageContent.bind(this);
 		const {firstName, lastName, options, selectedStructure, selectedSecondaryStructure} = this.props;
 		const searchType = _.includes(window.location.search, "struct") ? "structure" : "identity";
 		this.state = {
-			firstName, lastName, options, searchType, 
+			firstName: "", lastName: "", options, searchType, 
 			primaryStructure: selectedStructure || null,
 			secondaryStructure: selectedSecondaryStructure || 0};
 	}
@@ -63,6 +64,15 @@ class SearchBar extends Component {
 
 	onSubStructureSelect(e) {
 		this.setState({secondaryStructure: e.target.value});
+	}
+
+	messageContent() {
+		// const {firstName, lastName} = this.state;
+		// let invalidFields = [];
+		// const isFieldValid = (field) => {
+		// 	if (_.toInteger)
+		// }
+		// if (firstName)
 	}
 
 	render() {
@@ -135,7 +145,9 @@ class SearchBar extends Component {
 
 							{searchType == "identity" ? textInputs : selectInputs}
 																											
-							<input type="submit" value="Valider" style={{marginLeft: '3px'}} className="btn btn-success" disabled={_.isEmpty(firstName) && _.isEmpty(lastName) && searchType == "identity"} />
+							<input type="submit" value="Valider" style={{marginLeft: '3px'}} className="btn btn-success" 
+								disabled={((!_.isEmpty(firstName) && !_.isEmpty(lastName)) || (!_.isEmpty(firstName) && firstName.length < 2) || (!_.isEmpty(lastName) && lastName.length < 2)) && searchType == "identity"}
+							/>
 							
 						</div>
 						<div className='row'>

@@ -36,6 +36,7 @@ class App extends Component {
 				dispatch(requestUsersByStructures(primary_struct, secondary_struct));
 			}
 		}
+		console.log("app mounted");
 	}
 
 	componentWillUnmount() {
