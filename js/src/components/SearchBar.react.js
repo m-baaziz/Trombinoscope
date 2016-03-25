@@ -28,7 +28,7 @@ class SearchBar extends Component {
 			if (_.includes(_.toArray(_.mapValues(nextProps.subStructures, "structNomId")), _.toInteger(selectedSecondaryStructure))) {
 				this.setState({secondaryStructure: selectedSecondaryStructure});
 			} else {
-				this.setState({secondaryStructure: nextProps.subStructures[0] ? nextProps.subStructures[0].structNomId : 0});
+				this.setState({secondaryStructure: nextProps.subStructures[0] ? nextProps.subStructures[0].structure.structId : 0});
 			}
 		}
 	}
@@ -37,7 +37,7 @@ class SearchBar extends Component {
 		e.preventDefault();
 		const {firstName, lastName, primaryStructure, secondaryStructure, searchType} = this.state;
 		const {structures, subStructures, onSubmitIdentity, onSubmitStructures} = this.props
-		searchType == "identity" ? onSubmitIdentity(firstName, lastName) : onSubmitStructures(primaryStructure || structures[0].structNomId, secondaryStructure);
+		searchType == "identity" ? onSubmitIdentity(firstName, lastName) : onSubmitStructures(primaryStructure || structures[0].structure.structId, secondaryStructure);
 	}
 
 	setLastName(e) {
@@ -70,15 +70,15 @@ class SearchBar extends Component {
 		const {firstName, lastName} = this.state;
 		let invalidFields = [];
 		const regExp = /^[A-Za-z]+$/;
-		if (!firstName.match(regExp)) {
+		if (!_.isEmpty(firstName) && !firstName.match(regExp)) {
 			invalidFields.push("Prénom");
 		}
-		if (!lastName.match(regExp)) {
+		if (!_.isEmpty(lastName) && !lastName.match(regExp)) {
 			invalidFields.push("Nom");
 		}
 		const errors = _.map(invalidFields, (field, index) => {
 			return (
-				<div className="alert alert-error" role="alert"><b>Attention !</b> Le {field} ne doit contenir que des lettres</div>
+				<div className="alert alert-danger" key={index} role="alert"><b>Attention !</b> Le {field} ne doit contenir que des lettres</div>
 			)
 		})
 
@@ -108,12 +108,12 @@ class SearchBar extends Component {
 
 		const textInputs = (
 			[
-				<div id="div-name" key='1' className="form-group has-feedback">
+				<div id="div-name" key={1} className="form-group has-feedback">
 					<input type="text" className="form-control" placeholder="Nom" value={lastName} onChange={this.setLastName} />	
 					<span id="icon-name" className="glyphicon glyphicon-pencil form-control-feedback" ariaHidden="true"></span>
 					<span id="input-name" className="sr-only">(success)</span>
 				</div>,
-				<div id="div-fname" key='2' className="form-group has-feedback">
+				<div id="div-fname" key={2} className="form-group has-feedback">
 					<input type="text" className="form-control" placeholder="Prénom" value={firstName} onChange={this.setFirstName} />		
 					<span className="glyphicon glyphicon-pencil form-control-feedback" ariaHidden="true"></span>  								  						  								
 					<span id="input-fname" className="sr-only">(success)</span>
@@ -135,7 +135,7 @@ class SearchBar extends Component {
 	      <select className="form-control" value={secondaryStructure} onChange={this.onSubStructureSelect}>
 	        {_.map(subStructures, (struct, index) => {
 	        	return (
-	        		<option key={index} value={struct.structNomId}> {
+	        		<option key={index} value={struct.structure.structId}> {
 	        			struct.structureLibelle}
 	        		</option>
 	        	)
