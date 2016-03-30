@@ -170,7 +170,8 @@ class SearchBar extends Component {
 			<div className="form jumbotron">
 				<div className="row">
 					<div className="form-inline">
-						<Switch 
+						<Switch
+							state={searchType == "identity"}
 							onText="Identité"
 							offText="Structure"
 							onColor="success"

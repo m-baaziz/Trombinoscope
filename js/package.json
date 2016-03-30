@@ -4,7 +4,7 @@
   "description": "A trombinoscope application",
   "main": "./src/index.js",
   "scripts": {
-    "start": "webpack --progress --profile --colors && uglifyjs ../app/assets/javascript/.bundle.js --compress --mangle -o ../app/assets/javascript/.bundle.js"
+    "start": "webpack --progress --profile --colors"
   },
   "dependencies": {
     "babel-plugin-module-alias": "^1.2.0",
@@ -20,7 +20,8 @@
     "react-router-redux": "^4.0.0",
     "redux": "^3.3.1",
     "redux-thunk": "^2.0.1",
-    "style": "0.0.3"
+    "style": "0.0.3",
+    "uglify-js": "^2.6.2"
   },
   "engines": {
     "node": "5.6.0"
