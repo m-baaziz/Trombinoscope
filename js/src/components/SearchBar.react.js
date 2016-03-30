@@ -1,4 +1,7 @@
+require("react-bootstrap-switch/src/less/bootstrap3/build.less");
+
 import React, {Component} from 'react';
+import Switch from 'react-bootstrap-switch';
 import _ from 'lodash';
 
 class SearchBar extends Component {
@@ -13,6 +16,7 @@ class SearchBar extends Component {
 		this.onStructureSelect = this.onStructureSelect.bind(this);
 		this.onSubStructureSelect = this.onSubStructureSelect.bind(this);
 		this.messageContent = this.messageContent.bind(this);
+		this.isSubmitDisabled = this.isSubmitDisabled.bind(this);
 		const {firstName, lastName, options, selectedStructure, selectedSecondaryStructure} = this.props;
 		const searchType = _.includes(window.location.search, "struct") ? "structure" : "identity";
 		this.state = {
@@ -53,7 +57,7 @@ class SearchBar extends Component {
 	}
 
 	onRadioChange(e) {
-		this.setState({searchType: e.target.value});
+		this.setState({searchType: e ? "identity" : "structure"});
 	}
 
 	onStructureSelect(e) {
@@ -85,6 +89,11 @@ class SearchBar extends Component {
 		return errors;
 	}
 
+	isSubmitDisabled() {
+		const {firstName, lastName, searchType} = this.state;
+		return (!_.isEmpty(this.messageContent()) || (_.isEmpty(firstName) && _.isEmpty(lastName)) || (!_.isEmpty(firstName) && firstName.length < 2) || (!_.isEmpty(lastName) && lastName.length < 2)) && searchType == "identity";
+	}
+
 	render() {
 		const {firstName, lastName, options, primaryStructure, secondaryStructure, searchType} = this.state;
 		const {structures, subStructures} = this.props;
@@ -96,14 +105,6 @@ class SearchBar extends Component {
 			   </label>
 			 	</div>
 			);
-		}
-
-		const buildRadio = (name, value) => {
-			return (
-				<div className="radio">
-				  <label><input type="radio" name="searchType" value={value} checked={this.state.searchType == value} onChange={this.onRadioChange} />{name}</label>
-				</div>
-			)
 		}
 
 		const textInputs = (
@@ -144,22 +145,24 @@ class SearchBar extends Component {
 	    </div>
 		)
 
-		const isSubmitDisabled = () => {
-			return !_.isEmpty(this.messageContent() || (_.isEmpty(firstName) && _.isEmpty(lastName)) || (!_.isEmpty(firstName) && firstName.length < 2) || (!_.isEmpty(lastName) && lastName.length < 2)) && searchType == "identity";
-		}
-
 		return (
 			<div className="form jumbotron">
 				<div className="row">
-					<div className="form-group">
-						{buildRadio("Identité", "identity")}
-						{buildRadio("Structure", "structure")}
+					<div className="form-inline">
+						<Switch 
+							onText="Identité"
+							offText="Structure"
+							onColor="success"
+							offColor="warning"
+							onChange={this.onRadioChange}
+							labelWidth="0"
+						/>
 					</div>
 					<form className="form-inline" onSubmit={this.onSubmit}>
 						{searchType == "identity" ? textInputs : selectInputs}
 																										
-						<input type="submit" value="Valider" style={{marginLeft: '3px'}} className={`btn ${isSubmitDisabled() ? '' : 'btn-success'}`}
-							disabled={isSubmitDisabled()}
+						<input type="submit" value="Valider" style={{marginLeft: '3px'}} className={`btn ${this.isSubmitDisabled() ? '' : 'btn-success'}`}
+							disabled={this.isSubmitDisabled()}
 						/>
 						<div className='row'>
 							{buildCheckBox('photo', 'photo')}
