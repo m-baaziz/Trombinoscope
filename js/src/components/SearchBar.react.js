@@ -59,7 +59,6 @@ class SearchBar extends Component {
 				status = "ok";
 			}
 		}
-		console.log(status);
 		this.setState({[key]: value, [`${key}Status`]: status});
 	}
 
