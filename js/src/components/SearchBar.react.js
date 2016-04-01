@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import Switch from 'react-bootstrap-switch';
 import _ from 'lodash';
 
-const REGEXP = /^[A-Za-z]+$/;
+const REGEXP = /^[A-Za-z ]+$/;
 
 class SearchBar extends Component {
 
@@ -16,7 +16,7 @@ class SearchBar extends Component {
 		this.onRadioChange = this.onRadioChange.bind(this);
 		this.onStructureSelect = this.onStructureSelect.bind(this);
 		this.onSubStructureSelect = this.onSubStructureSelect.bind(this);
-		this.messageContent = this.messageContent.bind(this);
+		this.buildMessageContent = this.buildMessageContent.bind(this);
 		const {firstName, lastName, options, selectedStructure, selectedSecondaryStructure} = this.props;
 		const searchType = _.includes(window.location.search, "struct") ? "structure" : "identity";
 		this.state = {
@@ -80,7 +80,7 @@ class SearchBar extends Component {
 		this.setState({secondaryStructure: e.target.value});
 	}
 
-	messageContent() {
+	buildMessageContent() {
 		const {firstNameStatus, lastNameStatus} = this.state;
 		let invalidFields = [];
    	if (firstNameStatus == "warning") {
@@ -91,19 +91,24 @@ class SearchBar extends Component {
    	}
 		const errors = _.map(invalidFields, (field, index) => {
 			return (
-				<div className="alert alert-danger" key={index} role="alert"><b>Attention !</b> Le {field} ne doit contenir que des lettres</div>
+				<div key={index}><b>Attention !</b> Le {field} ne doit contenir que des lettres</div>
 			)
 		})
-		return errors;
+
+		const msg = _.concat(this.props.errors, ...errors);
+		return !_.isEmpty(msg) ?
+			(<div className="alert alert-danger" role="alert">
+				{msg}
+			</div>) : null
 	}
 
 	render() {
-		const {firstName, lastName, options, primaryStructure, secondaryStructure, searchType} = this.state;
+		const {firstName, lastName, options, primaryStructure, secondaryStructure, searchType, firstNameStatus, lastNameStatus} = this.state;
 		const {structures, subStructures} = this.props;
 
-		const messageContent = this.messageContent();
+		const messageContent = this.buildMessageContent();
 
-		const isSubmitDisabled = (!_.isEmpty(messageContent) || (_.isEmpty(firstName) && _.isEmpty(lastName)) || (!_.isEmpty(firstName) && firstName.length < 2) || (!_.isEmpty(lastName) && lastName.length < 2)) && searchType == "identity";
+		const isSubmitDisabled = (firstNameStatus == "warning" || lastNameStatus == "warning" || (_.isEmpty(firstName) && _.isEmpty(lastName)) || (!_.isEmpty(firstName) && firstName.length < 2) || (!_.isEmpty(lastName) && lastName.length < 2)) && searchType == "identity";
 
 		const buildCheckBox = (name, value) => {
 			return (
@@ -183,9 +188,7 @@ class SearchBar extends Component {
 					<form className="form-inline" onSubmit={this.onSubmit}>
 						{searchType == "identity" ? textInputs : selectInputs}
 																										
-						<input type="submit" value="Valider" style={{marginLeft: '3px'}} className={`btn ${isSubmitDisabled ? '' : 'btn-success'}`}
-							disabled={isSubmitDisabled}
-						/>
+						<input type="submit" value="Valider" style={{marginLeft: '3px'}} className={`btn ${isSubmitDisabled ? '' : 'btn-success'}`} disabled={isSubmitDisabled} />
 						<div className='row'>
 							{buildCheckBox('photo', 'photo')}
 							{buildCheckBox('structure', 'structure')}

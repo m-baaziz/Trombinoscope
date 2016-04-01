@@ -9,7 +9,8 @@ import UsersTable from '../components/UsersTable.react';
 
 import {requestUsersByIdentity, requestUsersByStructures, requestStructures, requestSubStructures} from '../actions/ApiActions';
 import {swapOption, selectUser} from '../actions/UsersActions';
-import {clearSubStructures} from "../actions/StructuresActions";
+import {clearSubStructures} from '../actions/StructuresActions';
+import {clearErrors} from '../actions/ErrorsActions';
 
 class App extends Component {
 
@@ -21,6 +22,7 @@ class App extends Component {
 		this.requestSubStructures = this.requestSubStructures.bind(this);
 		this.swapOption = this.swapOption.bind(this);
 		this.selectUser = this.selectUser.bind(this);
+		this.state = {initialSubStructuresLoaded: false};
 	}
 
 	componentDidMount() {
@@ -42,9 +44,16 @@ class App extends Component {
 		this.props.dispatch(clearSubStructures());
 	}
 
-	componentwillReceiveProps(nextProps) {
-		if (_.isEmpty(nextProps.subStructures) && !_.isEmpty(nextProps.structures)) {
-			this.props.dispatch(requestSubStructures(nextProps.structures[0].structNomId));
+	componentWillReceiveProps(nextProps) {
+		const {dispatch, subStructures, errors} = this.props;
+		if (!this.state.initialSubStructuresLoaded && _.isEmpty(subStructures) && !_.isEmpty(nextProps.structures)) {
+			dispatch(requestSubStructures(nextProps.structures[0].structNomId));
+			this.setState({initialSubStructuresLoaded: true});
+		}
+		if (_.isEmpty(errors) && !_.isEmpty(nextProps.errors)) {
+			setTimeout(() => {
+				dispatch(clearErrors())
+			}, 3000);
 		}
 	}
 
@@ -72,7 +81,7 @@ class App extends Component {
 
 	render() {
 		const {first_name, last_name, primary_struct, secondary_struct} = this.props.location.query;
-		const {users, options, structures, subStructures} = this.props;
+		const {users, options, structures, subStructures, errors} = this.props;
 		const onTitleClick = (e) => {
 			window.location.href = "/";
 		}
@@ -95,6 +104,7 @@ class App extends Component {
 						onStructureSelect={this.requestSubStructures}
 						onSubmitIdentity={this.requestUsersByIdentity}
 						onSubmitStructures={this.requestUsersByStructures}
+						errors={errors}
 					/>
 					<UsersTable users={users} options={options} onUserClick={this.selectUser} />
 				</div>
@@ -112,7 +122,8 @@ const mapStateToProps = (state) => {
     users: state.users.all,
     options: state.options,
     structures: state.structures.primary,
-    subStructures: state.structures.secondary
+    subStructures: state.structures.secondary,
+    errors: state.errors
   }
 }
 

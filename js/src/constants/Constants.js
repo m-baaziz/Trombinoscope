@@ -10,6 +10,8 @@ module.exports = {
 		RECEIVE_STRUCTURES: null,
 		REQUEST_SUB_STRUCTURES: null,
 		RECEIVE_SUB_STRUCTURES: null,
-		CLEAR_SUB_STRUCTURES: null
+		CLEAR_SUB_STRUCTURES: null,
+		ADD_ERROR: null,
+		CLEAR_ERRORS: null
 	})
 }
