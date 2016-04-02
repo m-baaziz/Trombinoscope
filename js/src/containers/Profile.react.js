@@ -28,27 +28,34 @@ class Profile extends Component {
 		const firstName = nameArray.join(' ');
 		const infos = _.map(_.keys(_.omit(user, ["nom", "prenom", "photo"])), (key, index) => {
 										return (
-											<p key={index}>
-												{key == "sousStructure" ? "sous-structure" : key}: {user[key]}
-											</p>
+											<div key={index} className="row	">
+												<div className="col-md-4 col-sm-4 col-xs-6 "><p >{key == "sousStructure" ? "sous-structure" : key}:</p> </div>
+												<div className="col-md-8 col-sm-8 col-xs-6"><p>{_.isEmpty(user[key]) ? "N/A" : user[key]}</p> </div>												
+											</div>											
 										);
 									});
 		return (
 			<div className="container-fluid">
 				<div className="page-header"><h1 className="text-left">Trombinoscope <small>{user.nom}</small></h1></div>
 				<div className="jumbotron">
-					<div className="row">
-						<div className="photo col-md-4">
-							<div>
-								<img src={`https://demeter.utc.fr/portal/pls/portal30/portal30.get_photo_utilisateur_mini?username=${user.login}`} onError={this.onImgError} className="img-rounded"/>
-							</div>				
+					<div className="row id-card">
+						<div className="photo col-sm-4">
+							
+							<img src={`https://demeter.utc.fr/portal/pls/portal30/portal30.get_photo_utilisateur_mini?username=${user.login}`} onError={this.onImgError} className="img-rounded img-responsive"/>
+							
 						</div>
-						<div className="info col-md-8">
-							<div>
-								<p>Nom: {lastName}</p>
-								<p>Prenom: {firstName}</p>
-								{infos}
-							</div>
+						<div className="info col-sm-8">
+							<div className="container-fluid">
+								<div className="row">
+									<div className="col-md-4 col-sm-4 col-xs-6 "><p>Nom:</p> </div>
+									<div className="col-md-8 col-sm-8 col-xs-6"><p>{lastName}</p> </div>								
+								</div>
+								<div className="row">
+									<div className="col-md-4 col-sm-4 col-xs-6 "><p>Prenom:</p> </div>
+									<div className="col-md-8 col-sm-8 col-xs-6"><p>{firstName}</p> </div>								
+								</div>															
+								{infos}							
+							</div>															
 						</div>
 					</div>
 				</div>

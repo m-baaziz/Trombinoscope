@@ -89,13 +89,19 @@ class SearchBar extends Component {
    	if (lastNameStatus == "warning") {
       invalidFields.push("Nom");
    	}
-		const errors = _.map(invalidFields, (field, index) => {
+		const fieldsErrors = _.map(invalidFields, (field, index) => {
 			return (
 				<div key={index}><b>Attention !</b> Le {field} ne doit contenir que des lettres</div>
 			)
-		})
+		});
 
-		const msg = _.concat(this.props.errors, ...errors);
+		const apiErrors = _.map(this.props.errors, (error, index) => {
+			return (
+				<div key={index}>{error}</div>
+			)
+		});
+
+		const msg = _.concat(apiErrors, ...fieldsErrors);
 		return !_.isEmpty(msg) ?
 			(<div className="alert alert-danger" role="alert">
 				{msg}

@@ -12,7 +12,6 @@ module.exports = {
 		});
 		req.error((error) => {
 			dispatch(addError(error.responseText));
-			console.log('dans get users identi');
 		})
 	},
 
@@ -23,7 +22,6 @@ module.exports = {
 		});
 		req.error((error) => {
 			dispatch(addError(error.responseText));
-			console.log('dans get users struct');
 		})
 	},
 

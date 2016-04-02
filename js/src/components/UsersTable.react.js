@@ -20,23 +20,25 @@ class UsersTable extends Component {
 		const lastName =  _.lowerCase(_.trim(_.takeWhile(user.nom.split(' '), block => {return block == _.toUpper(block)}).join('')));
 		const firstName = user.prenom;
 		return (
-			<div key={user.login} className={`user-cell col-xs-${_.floor(12/USERS_PER_ROW)}`}>
-				{
-					_.includes(options, "photo") ? 
-					(<div className="photo">
-						<Link to={`profile?first_name=${firstName}&last_name=${lastName}`} onClick={this.props.onUserClick.bind(null, user)}>
-							<img src={`https://demeter.utc.fr/portal/pls/portal30/portal30.get_photo_utilisateur_mini?username=${user.login}`} onError={this.onImgError} />
-						</Link>
-					</div>) :
-					null
-				}
-				{
-					_.map(_.omit(options, 'photo'), (option, index) => {
-						return (
-							<div key={index}>{user[option]}</div>
-						);
-					})
-				}
+			<div>
+				<div key={user.login} className={`user-cell col-md-${_.floor(12/USERS_PER_ROW)}`}>
+					{
+						_.includes(options, "photo") ? 
+						(<div className="photo">
+							<Link to={`profile?first_name=${firstName}&last_name=${lastName}`} onClick={this.props.onUserClick.bind(null, user)}>
+								<img className="photo-tab" src={`https://demeter.utc.fr/portal/pls/portal30/portal30.get_photo_utilisateur_mini?username=${user.login}`} onError={this.onImgError} />
+							</Link>
+						</div>) :
+						null
+					}
+					{
+						_.map(_.omit(options, 'photo'), (option, index) => {
+							return (
+								<div key={index}>{user[option]}</div>
+							);
+						})
+					}
+				</div>
 			</div>
 		);
 	}
