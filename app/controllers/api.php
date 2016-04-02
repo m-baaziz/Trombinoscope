@@ -8,8 +8,8 @@
 		$service = explode('?', end(explode('/', $_SERVER['REQUEST_URI'])))[0];
 
 		if ($service == "users") {
-			if ((strlen($_GET['first_name']) > 0 && preg_match($regex, $_GET['first_name'])) || 
-					(strlen($_GET['last_name']) > 0 && preg_match($regex, $_GET['last_name']))) {
+			if ((strlen($_GET['first_name']) > 1 && preg_match($regex, $_GET['first_name'])) || 
+					(strlen($_GET['last_name']) > 1 && preg_match($regex, $_GET['last_name']))) {
 				$url = "https://webapplis.utc.fr/Trombi_ws/mytrombi/result?nom=".$_GET['last_name']."&prenom=".$_GET['first_name'];
 			} elseif (strlen($_GET['primary_struct']) > 0 || strlen($_GET['secondary_struct']) > 0) {
 				$url = "https://webapplis.utc.fr/Trombi_ws/mytrombi/resultstruct?pere=".$_GET['primary_struct']."&fils=".$_GET['secondary_struct'];
