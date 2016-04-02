@@ -12,6 +12,7 @@ module.exports = {
 		});
 		req.error((error) => {
 			dispatch(addError(error.responseText));
+			console.log('dans get users identi');
 		})
 	},
 
@@ -22,6 +23,7 @@ module.exports = {
 		});
 		req.error((error) => {
 			dispatch(addError(error.responseText));
+			console.log('dans get users struct');
 		})
 	},
 
@@ -30,9 +32,6 @@ module.exports = {
 		req.done((data) => {
 			dispatch(receiveStructures(data));
 		});
-		req.error((error) => {
-			dispatch(addError(error.responseText));
-		})
 	},
 
 	getSubStructures: (dispatch, structId) => {
@@ -40,8 +39,5 @@ module.exports = {
 		req.done((data) => {
 			dispatch(receiveSubStructures(data));
 		});
-		req.error((error) => {
-			dispatch(addError(error.responseText));
-		})
 	}
 }
