@@ -27,19 +27,12 @@ class SearchBar extends Component {
 			options, 
 			searchType,
 			primaryStructure: selectedStructure || null,
-			secondaryStructure: selectedSecondaryStructure || 0};
+			secondaryStructure: selectedSecondaryStructure || 0
+		};
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const {options, selectedSecondaryStructure} = nextProps;
-		this.setState({options});
-		if (_.xor(_.toArray(_.mapValues(this.props.subStructures, "structNomId")),_.toArray(_.mapValues(nextProps.subStructures, "structNomId"))).length > 0) {
-			if (_.includes(_.toArray(_.mapValues(nextProps.subStructures, "structNomId")), _.toInteger(selectedSecondaryStructure))) {
-				this.setState({secondaryStructure: selectedSecondaryStructure});
-			} else {
-				this.setState({secondaryStructure: nextProps.subStructures[0] ? nextProps.subStructures[0].structure.structId : 0});
-			}
-		}
+		this.setState({options: nextProps.options});
 	}
 
 	onSubmit(e) {

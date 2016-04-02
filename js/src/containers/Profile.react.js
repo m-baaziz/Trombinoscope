@@ -8,6 +8,7 @@ class Profile extends Component {
 
 	constructor(props) {
 		super(props);
+		this.goBack = this.goBack.bind(this);
 	}
 
 	componentDidMount() {
@@ -19,6 +20,10 @@ class Profile extends Component {
 
 	onImgError(e) {
 		e.target.src = "../../app/assets/images/profil.jpg";
+	}
+
+	goBack() {
+		this.props.history.goBack();
 	}
 
 	render() {
@@ -36,13 +41,18 @@ class Profile extends Component {
 									});
 		return (
 			<div className="container-fluid">
-				<div className="page-header"><h1 className="text-left">Trombinoscope <small>{user.nom}</small></h1></div>
+				<div className="page-header row">
+	        <div onClick={this.goBack} className='cursor col-md-3'>
+	          <h1 className="text-left">Trombinoscope</h1>
+	        </div>
+	        <div>
+	          <h1><small>{user.nom}</small></h1>
+	        </div>
+        </div>
 				<div className="jumbotron">
 					<div className="row id-card">
 						<div className="photo col-sm-4">
-							
 							<img src={`https://demeter.utc.fr/portal/pls/portal30/portal30.get_photo_utilisateur_mini?username=${user.login}`} onError={this.onImgError} className="img-rounded img-responsive"/>
-							
 						</div>
 						<div className="info col-sm-8">
 							<div className="container-fluid">
@@ -58,6 +68,9 @@ class Profile extends Component {
 							</div>															
 						</div>
 					</div>
+					<button onClick={this.goBack} type="button" className="btn btn-primary btn-back">
+           	<b> Retour</b>
+         	</button>
 				</div>
 			</div>
 		)

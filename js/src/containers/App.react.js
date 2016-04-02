@@ -26,22 +26,20 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		const {dispatch} = this.props;
+		const {dispatch, users, structures} = this.props;
 		const {first_name, last_name, primary_struct, secondary_struct} = this.props.location.query;
-		if (!_.isEmpty(first_name) || !_.isEmpty(last_name)) {
+		if ((!_.isEmpty(first_name) || !_.isEmpty(last_name)) && _.isEmpty(users)) {
 			dispatch(requestUsersByIdentity(first_name, last_name));
 		}
-		dispatch(requestStructures());
-		if (!_.isEmpty(primary_struct)) {
-			dispatch(requestSubStructures(primary_struct));
-			if (!_.isEmpty(secondary_struct)) {
-				dispatch(requestUsersByStructures(primary_struct, secondary_struct));
+		if (_.isEmpty(structures)) {
+			dispatch(requestStructures());
+			if (!_.isEmpty(primary_struct)) {
+				dispatch(requestSubStructures(primary_struct));
+				if (!_.isEmpty(secondary_struct)) {
+					dispatch(requestUsersByStructures(primary_struct, secondary_struct));
+				}
 			}
 		}
-	}
-
-	componentWillUnmount() {
-		this.props.dispatch(clearSubStructures());
 	}
 
 	componentWillReceiveProps(nextProps) {
