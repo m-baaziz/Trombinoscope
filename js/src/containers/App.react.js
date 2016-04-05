@@ -87,7 +87,7 @@ class App extends Component {
 			<div className="container-fluid">
 				<div className="page-header row">
 					<div onClick={onTitleClick} className='cursor col-md-3'>
-						<h1 className="text-left">Trombinoscope</h1>
+						<h1 className="text-left">Trombinoscope de ouf</h1>
 					</div>
 				</div>
 				<div className="res_containt">
