@@ -2,8 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  //devtool: 'source-map',
-  devtool: 'eval',
+  devtool: 'source-map',
   entry: [
     './src/containers/Root.react.js'
   ],

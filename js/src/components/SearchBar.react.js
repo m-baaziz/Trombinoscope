@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import Switch from 'react-bootstrap-switch';
 import _ from 'lodash';
 
-const REGEXP = /^[A-Za-z ]+$/;
+const REGEXP = /^[A-Za-z]+$/;
 
 class SearchBar extends Component {
 

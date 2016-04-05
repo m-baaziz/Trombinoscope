@@ -1,0 +1,12 @@
+<IfModule dir_module>
+    DirectoryIndex index.php app/views/index.php index.html
+</IfModule>
+
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^profile?(.*)$ ./app/views/index.php?($1) [L,QSA]
+RewriteRule ^users?(.+)$ ./app/controllers/api.php?ressource=users&($1) [L,QSA]
+RewriteRule ^structures?(.+)$ ./app/controllers/api.php?ressource=structures&($1) [L,QSA]

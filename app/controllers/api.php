@@ -2,10 +2,10 @@
 	$method = $_SERVER['REQUEST_METHOD'];
 	if ($method == 'GET') {
 		$url = "";
-		$regex = "/^[A-Za-z ]+$/";
+		$regex = "/^[A-Za-z]+$/";
 		header('Content-Type: application/json; charset=utf-8');
 		http_response_code(200);
-		$service = explode('?', end(explode('/', $_SERVER['REQUEST_URI'])))[0];
+		$service = $_GET['ressource'];
 
 		if ($service == "users") {
 			if ((strlen($_GET['first_name']) > 1 && preg_match($regex, $_GET['first_name'])) || 
@@ -30,7 +30,7 @@
 			}
 		}
 
-		if (strlen($url) == 0) {
+		if (strlen($url) == 0) {   // si $url n'est toujours pas remplie, c'est que les conditions sur les variables n'ont pas été vérifiées
 			http_response_code(422);
 			$data = "Requête invalide, veuillez vérifier vos paramètres.";
 		} elseif ($data == "[ ]") {

@@ -6,7 +6,7 @@ import {addError, clearErrors} from '../actions/ErrorsActions';
 
 module.exports = {
 	getUsersByIdentity: (dispatch, firstName, lastName) => {
-		const req = $.get('localhost/api/users', {first_name: _.toString(firstName), last_name: _.toString(lastName)});
+		const req = $.get('users', {first_name: _.toString(firstName), last_name: _.toString(lastName)});
 		req.done((data) => {
 			dispatch(receiveUsers(data));
 		});
@@ -16,7 +16,7 @@ module.exports = {
 	},
 
 	getUsersByStructures: (dispatch, primary, secondary) => {
-		const req = $.get('localhost/api/users', {primary_struct: _.toString(primary), secondary_struct: !_.isEmpty(_.toString(secondary)) ? secondary : 0});
+		const req = $.get('users', {primary_struct: _.toString(primary), secondary_struct: !_.isEmpty(_.toString(secondary)) ? secondary : 0});
 		req.done((data) => {
 			dispatch(receiveUsers(data));
 		});
@@ -26,14 +26,14 @@ module.exports = {
 	},
 
 	getStructures: (dispatch) => {
-		const req = $.get('localhost/api/structures');
+		const req = $.get('structures');
 		req.done((data) => {
 			dispatch(receiveStructures(data));
 		});
 	},
 
 	getSubStructures: (dispatch, structId) => {
-		const req = $.get('localhost/api/structures', {struct_id: structId});
+		const req = $.get('structures', {struct_id: structId});
 		req.done((data) => {
 			dispatch(receiveSubStructures(data));
 		});
