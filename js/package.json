@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "babel-plugin-module-alias": "^1.2.0",
+    "babel-polyfill": "^6.7.4",
     "css": "^2.2.1",
     "keymirror": "^0.1.1",
     "less": "^2.6.1",
