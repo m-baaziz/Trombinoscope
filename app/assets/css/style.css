@@ -60,8 +60,17 @@
 
 @media screen and (max-width: 767px) {
  
-	.info{		
+	.info {		
 		border-radius: 0px 0px 10px 10px;
+	}
+
+	.checkbox-wrapper {
+		margin: 0 auto;
+		width: 90px;
+	}
+
+	.checkbox-wrapper .checkbox {
+		text-align: left;
 	}
 
 }

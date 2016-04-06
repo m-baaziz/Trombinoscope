@@ -111,7 +111,7 @@ class SearchBar extends Component {
 
 		const buildCheckBox = (name, value) => {
 			return (
-				<div style={{marginLeft: "3px"}} className="checkbox">
+				<div style={{marginLeft: "3px"}} className="checkbox ">
 			   <label>
 			     <input type="checkbox" value={value} checked={_.includes(options, value)} onChange={this.onCheckboxChange} /> {name}
 			   </label>
@@ -189,10 +189,12 @@ class SearchBar extends Component {
 																										
 						<input type="submit" value="Valider" style={{marginLeft: '3px'}} className={`btn ${isSubmitDisabled ? '' : 'btn-success'}`} disabled={isSubmitDisabled} />
 						<div className='row'>
-							{buildCheckBox('photo', 'photo')}
-							{buildCheckBox('structure', 'structure')}
-							{buildCheckBox('nom', 'nom')}
-							{buildCheckBox('e-mail', 'mail')}
+							<div className='checkbox-wrapper'>
+								{buildCheckBox('photo', 'photo')}
+								{buildCheckBox('structure', 'structure')}
+								{buildCheckBox('nom', 'nom')}
+								{buildCheckBox('e-mail', 'mail')}
+							</div>
 						</div>
 					</form>
 				</div>
