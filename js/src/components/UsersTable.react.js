@@ -21,7 +21,7 @@ class UsersTable extends Component {
 		const firstName = user.prenom;
 		return (
 			<div>
-				<div key={user.login} className={`user-cell col-md-${_.floor(12/USERS_PER_ROW)}`}>
+				<div key={user.login} className={`user-cell col-md-${_.floor(12/USERS_PER_ROW)} user-case`}>
 					{
 						_.includes(options, "photo") ? 
 						(<div className="photo">
