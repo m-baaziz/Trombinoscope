@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import {Link} from 'react-router';
+import MediaQuery from 'react-responsive';
 import _ from 'lodash';
 
 import SearchBar from '../components/SearchBar.react';
@@ -83,7 +84,37 @@ class App extends Component {
 		const onTitleClick = (e) => {
 			window.location.href = "/";
 		}
-		return (
+
+		const headerForm = (
+			<div className="container-fluid">
+				<div className="page-header row">
+					<div onClick={onTitleClick} className='cursor col-md-3'>
+						<h1 className="text-left">Trombinoscope</h1>
+					</div>
+					<div className='col-md-9'>
+						<SearchBar
+							form="header"
+							firstName={first_name}
+							lastName={last_name} options={options}
+							structures={structures}
+							subStructures={subStructures}
+							selectedStructure={primary_struct}
+							selectedSecondaryStructure={secondary_struct}
+							onOptionCheck={this.swapOption}
+							onStructureSelect={this.requestSubStructures}
+							onSubmitIdentity={this.requestUsersByIdentity}
+							onSubmitStructures={this.requestUsersByStructures}
+							errors={errors}
+						/>
+					</div>
+				</div>
+				<div className="res_containt">
+					<UsersTable users={users} options={options} onUserClick={this.selectUser} />
+				</div>
+			</div>
+		);
+
+		const bodyForm = (
 			<div className="container-fluid">
 				<div className="page-header row">
 					<div onClick={onTitleClick} className='cursor col-md-3'>
@@ -92,6 +123,7 @@ class App extends Component {
 				</div>
 				<div className="res_containt">
 					<SearchBar
+						form="body"
 						firstName={first_name}
 						lastName={last_name} options={options}
 						structures={structures}
@@ -106,6 +138,23 @@ class App extends Component {
 					/>
 					<UsersTable users={users} options={options} onUserClick={this.selectUser} />
 				</div>
+			</div>
+		);
+
+		// <ReactCSSTransitionGroup component='div' transitionName='anim' transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+			// <div key={0}>
+      	// {_.isEmpty(users) ? bodyForm : headerForm}
+      // </div>
+    // </ReactCSSTransitionGroup>
+
+		return (
+			<div>
+				<MediaQuery query='(min-width: 1240px)'>
+					{_.isEmpty(users) ? bodyForm : headerForm}
+				</MediaQuery>
+				<MediaQuery query='(max-width: 1239px)'>
+					{bodyForm}
+				</MediaQuery>
 			</div>
 		);
 	}

@@ -20,8 +20,7 @@ class UsersTable extends Component {
 		const lastName =  _.lowerCase(_.trim(_.takeWhile(user.nom.split(' '), block => {return block == _.toUpper(block)}).join('')));
 		const firstName = user.prenom;
 		return (
-			<div>
-				<div key={user.login} className={`user-cell col-md-${_.floor(12/USERS_PER_ROW)} user-case`}>
+				<div key={user.login} className={`user-cell col-md-${_.floor(12/USERS_PER_ROW)}`}>
 					{
 						_.includes(options, "photo") ? 
 						(<div className="photo">
@@ -39,7 +38,6 @@ class UsersTable extends Component {
 						})
 					}
 				</div>
-			</div>
 		);
 	}
 

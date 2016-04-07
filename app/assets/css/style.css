@@ -6,7 +6,7 @@
 	margin: 0 auto;
 }
 .header {
-	color: grey; 
+	color: gray; 
 	height: 5%;
 	width: 100%;
 }
@@ -29,26 +29,23 @@
 	width:98px;
 	height: 122px;
 }
-/*.photo img {
-	width: 98px;
-	height: 122px;
-}*/
-
-.test {
-	background-color: red;
-}
-.user-case {
+.user-cell {
+	padding: 5px;
 	text-align: center;
 	background-color: #C1C1C1;
 	border-radius: 6px;
 	border: solid #eee;
+	border-width: 2px;
 }
-.user-cell {
-	padding: 5px;
+.user-cell a {
+	color: inherit;
 }
 .user-cell img {
 	border: 1px solid;
 	border-radius: 6px;
+}
+.user-cell:hover {
+	border-color: #464646;
 }
 .cursor {
 	cursor: pointer;
@@ -56,7 +53,29 @@
 .id-card {
 	background-color: #5cb85c;
 	border-radius: 10px;
- }
+}
+.body-form .bootstrap-switch {
+	margin-bottom: 5px;
+}
+.header-form {
+	float: right;
+	margin-top: 45px;
+}
+.header-form .input-text, select {
+	margin-left: 3px;
+	width: 250px !important;
+}
+.header-form .checkbox-wrapper {
+	display: inline;
+}
+.header-form .checkbox-wrapper .checkbox {
+	margin-right: 3px;
+}
+.header-form .error-message {
+	margin: 0 auto;
+	position: absolute;
+	top: -35px;
+}
 
 @media screen and (max-width: 767px) {
  
@@ -72,5 +91,23 @@
 	.checkbox-wrapper .checkbox {
 		text-align: left;
 	}
+}
 
+
+.anim-enter {
+  opacity: 0.01;
+}
+
+.anim-enter.anim-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.anim-leave {
+  opacity: 1;
+}
+
+.anim-leave.example-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
 }

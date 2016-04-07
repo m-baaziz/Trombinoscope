@@ -103,8 +103,7 @@ class SearchBar extends Component {
 
 	render() {
 		const {firstName, lastName, options, primaryStructure, secondaryStructure, searchType, firstNameStatus, lastNameStatus} = this.state;
-		const {structures, subStructures} = this.props;
-
+		const {structures, subStructures, form} = this.props;
 		const messageContent = this.buildMessageContent();
 
 		const isSubmitDisabled = (firstNameStatus == "warning" || lastNameStatus == "warning" || (_.isEmpty(firstName) && _.isEmpty(lastName)) || (!_.isEmpty(firstName) && firstName.length < 2) || (!_.isEmpty(lastName) && lastName.length < 2)) && searchType == "identity";
@@ -134,13 +133,13 @@ class SearchBar extends Component {
 
 		const textInputs = (
 			[
-				<div id="div-name" key={1} className="form-group has-feedback">
-					<input type="text" className="form-control" placeholder="Nom" value={lastName} onChange={this.setName.bind(this, "lastName")} />	
+				<div key={1} className="form-group has-feedback">
+					<input type="text" className="form-control input-text" placeholder="Nom" value={lastName} onChange={this.setName.bind(this, "lastName")} />	
 					<span id="icon-name" className={getInputIconClass("lastName")} ariaHidden="true"></span>
 					<span id="input-name" className="sr-only">(success)</span>
 				</div>,
-				<div id="div-fname" key={2} className="form-group has-feedback">
-					<input type="text" className="form-control" placeholder="Prénom" value={firstName} onChange={this.setName.bind(this, "firstName")} />		
+				<div key={2} className="form-group has-feedback">
+					<input type="text" className="form-control input-text" placeholder="Prénom" value={firstName} onChange={this.setName.bind(this, "firstName")} />		
 					<span className={getInputIconClass("firstName")} ariaHidden="true"></span>  								  						  								
 					<span id="input-fname" className="sr-only">(success)</span>
 				</div>
@@ -170,11 +169,47 @@ class SearchBar extends Component {
 	    </div>
 		)
 
-		return (
-			<div className="form jumbotron">
+		const bodyForm = (
+			<div className="form jumbotron body-form">
 				<div className="row">
-					<div className="form-inline">
-						<Switch
+					<Switch
+						state={searchType == "identity"}
+						onText="Identité"
+						offText="Structure"
+						onColor="success"
+						offColor="warning"
+						onChange={this.onRadioChange}
+						labelWidth="0"
+					/>
+					<form className="form-inline" onSubmit={this.onSubmit}>
+					
+						{searchType == "identity" ? textInputs : selectInputs}
+																										
+						<input type="submit" value="Valider" style={{marginLeft: '3px'}} className={`btn ${isSubmitDisabled ? '' : 'btn-success'}`} disabled={isSubmitDisabled} />
+						<div className='checkbox-wrapper'>
+							{buildCheckBox('photo', 'photo')}
+							{buildCheckBox('structure', 'structure')}
+							{buildCheckBox('nom', 'nom')}
+							{buildCheckBox('e-mail', 'mail')}
+						</div>
+					</form>
+				</div>
+				<div className='error-message' style={{marginTop: '5px'}}>
+						{messageContent}
+				</div>
+			</div>
+		);
+
+		const headerForm = (
+			<div className='header-form'>
+				<form className="form-inline" onSubmit={this.onSubmit}>
+					<div className='checkbox-wrapper'>
+						{buildCheckBox('photo', 'photo')}
+						{buildCheckBox('structure', 'structure')}
+						{buildCheckBox('nom', 'nom')}
+						{buildCheckBox('e-mail', 'mail')}
+					</div>
+					<Switch
 							state={searchType == "identity"}
 							onText="Identité"
 							offText="Structure"
@@ -183,26 +218,23 @@ class SearchBar extends Component {
 							onChange={this.onRadioChange}
 							labelWidth="0"
 						/>
-					</div>
-					<form className="form-inline" onSubmit={this.onSubmit}>
-						{searchType == "identity" ? textInputs : selectInputs}
-																										
-						<input type="submit" value="Valider" style={{marginLeft: '3px'}} className={`btn ${isSubmitDisabled ? '' : 'btn-success'}`} disabled={isSubmitDisabled} />
-						<div className='row'>
-							<div className='checkbox-wrapper'>
-								{buildCheckBox('photo', 'photo')}
-								{buildCheckBox('structure', 'structure')}
-								{buildCheckBox('nom', 'nom')}
-								{buildCheckBox('e-mail', 'mail')}
-							</div>
-						</div>
-					</form>
-				</div>
-				<div id="msg">
-					{messageContent}
+					{searchType == "identity" ? textInputs : selectInputs}
+					<button type="submit" className={`btn ${isSubmitDisabled ? '' : 'btn-success'} submit-button`} disabled={isSubmitDisabled}>
+						<i className='glyphicon glyphicon-ok' />
+					</button>
+				</form>
+				<div className='error-message'>
+						{messageContent}
 				</div>
 			</div>
 		);
+
+		return (
+			<div>
+				{form == 'header' ? headerForm : bodyForm}
+			</div>
+		);
+
 	}
 }
 
