@@ -141,12 +141,6 @@ class App extends Component {
 			</div>
 		);
 
-		// <ReactCSSTransitionGroup component='div' transitionName='anim' transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-			// <div key={0}>
-      	// {_.isEmpty(users) ? bodyForm : headerForm}
-      // </div>
-    // </ReactCSSTransitionGroup>
-
 		return (
 			<div>
 				<MediaQuery query='(min-width: 1240px)'>

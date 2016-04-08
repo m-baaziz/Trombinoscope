@@ -23,11 +23,11 @@ class UsersTable extends Component {
 				<div key={user.login} className={`user-cell col-md-${_.floor(12/USERS_PER_ROW)}`}>
 					{
 						_.includes(options, "photo") ? 
-						(<div className="photo">
-							<Link to={`profile?first_name=${firstName}&last_name=${lastName}`} onClick={this.props.onUserClick.bind(null, user)}>
+						(<Link to={`profile?first_name=${firstName}&last_name=${lastName}`} onClick={this.props.onUserClick.bind(null, user)}>
+							<div className="photo">
 								<img className="photo-tab" src={`https://demeter.utc.fr/portal/pls/portal30/portal30.get_photo_utilisateur_mini?username=${user.login}`} onError={this.onImgError} />
-							</Link>
-						</div>) :
+							</div>
+						</Link>) :
 						null
 					}
 					{

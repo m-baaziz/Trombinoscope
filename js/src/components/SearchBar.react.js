@@ -32,7 +32,15 @@ class SearchBar extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.setState({options: nextProps.options});
+		const {options, subStructures} = nextProps;
+		this.setState({options});
+		const structIdArray =  _.map(subStructures, struct => {
+			return struct.structure.structId;
+		})
+		const sameStructure = _.includes(structIdArray, _.toInteger(this.state.secondaryStructure));
+		if (!_.isEmpty(subStructures) && !sameStructure) {
+			this.setState({secondaryStructure: subStructures[0].structure.structId});
+		}
 	}
 
 	onSubmit(e) {
