@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import {Link} from 'react-router';
+import {TransitionMotion, spring, utils as RMutils} from 'react-motion';
 import MediaQuery from 'react-responsive';
 import _ from 'lodash';
 
@@ -23,6 +24,7 @@ class App extends Component {
 		this.requestSubStructures = this.requestSubStructures.bind(this);
 		this.swapOption = this.swapOption.bind(this);
 		this.selectUser = this.selectUser.bind(this);
+		this.getFormToShow = this.getFormToShow.bind(this);
 		this.state = {initialSubStructuresLoaded: false};
 	}
 
@@ -78,6 +80,10 @@ class App extends Component {
 		this.props.dispatch(swapOption(option));
 	}
 
+	getFormToShow() {
+		return (!_.isEmpty(this.props.users) && window.innerWidth >= 1240) ? ["header"] : ["body"];
+ 	}
+
 	render() {
 		const {first_name, last_name, primary_struct, secondary_struct} = this.props.location.query;
 		const {users, options, structures, subStructures, errors} = this.props;
@@ -85,76 +91,101 @@ class App extends Component {
 			window.location.href = "/";
 		}
 
-		const headerForm = (
-			<div className="container-fluid">
-				<div className="page-header row">
-					<div onClick={onTitleClick} className='cursor col-md-3'>
-						<h1 className="text-left">Trombinoscope</h1>
-					</div>
-					<div className='col-md-9'>
-						<SearchBar
-							form="header"
-							firstName={first_name}
-							lastName={last_name} options={options}
-							structures={structures}
-							subStructures={subStructures}
-							selectedStructure={primary_struct}
-							selectedSecondaryStructure={secondary_struct}
-							onOptionCheck={this.swapOption}
-							onStructureSelect={this.requestSubStructures}
-							onSubmitIdentity={this.requestUsersByIdentity}
-							onSubmitStructures={this.requestUsersByStructures}
-							errors={errors}
-						/>
-					</div>
-				</div>
-				<div className="res_containt">
-					<UsersTable users={users} options={options} onUserClick={this.selectUser} />
-				</div>
-			</div>
+		const animationStyles = _.map(this.getFormToShow(), form => {
+			return { key: form, style: {width: 0, scale: 0} };
+		});
+
+		const animatedBodyForm = (
+			<TransitionMotion
+        willEnter={() => {return {width: spring(600), scale: spring(50)}}}
+        styles={animationStyles} >
+
+        {values =>
+          <div>
+            {values.map(form => {
+              let styles = {
+                transform: `scale(${form.scale})`,
+                width: form.width
+              };
+
+              const headerForm = (
+								<div className="container-fluid">
+									<div className="page-header row">
+										<div onClick={onTitleClick} className='cursor col-md-3'>
+											<h1 className="text-left">Trombinoscope</h1>
+										</div>
+										<div className='col-md-9' key={form.key} style={styles}>
+											<SearchBar
+												form="header"
+												firstName={first_name}
+												lastName={last_name} options={options}
+												structures={structures}
+												subStructures={subStructures}
+												selectedStructure={primary_struct}
+												selectedSecondaryStructure={secondary_struct}
+												onOptionCheck={this.swapOption}
+												onStructureSelect={this.requestSubStructures}
+												onSubmitIdentity={this.requestUsersByIdentity}
+												onSubmitStructures={this.requestUsersByStructures}
+												errors={errors}
+											/>
+										</div>
+									</div>
+									<div className="res_containt">
+										<UsersTable users={users} options={options} onUserClick={this.selectUser} />
+									</div>
+								</div>
+							);
+
+							const bodyForm = (
+								<div className="container-fluid">
+									<div className="page-header row">
+										<div onClick={onTitleClick} className='cursor col-md-3'>
+											<h1 className="text-left">Trombinoscope</h1>
+										</div>
+									</div>
+									<div className="res_containt">
+										<div key={form.key} style={styles}>
+											<SearchBar
+												form="body"
+												firstName={first_name}
+												lastName={last_name} options={options}
+												structures={structures}
+												subStructures={subStructures}
+												selectedStructure={primary_struct}
+												selectedSecondaryStructure={secondary_struct}
+												onOptionCheck={this.swapOption}
+												onStructureSelect={this.requestSubStructures}
+												onSubmitIdentity={this.requestUsersByIdentity}
+												onSubmitStructures={this.requestUsersByStructures}
+												errors={errors}
+											/>
+										</div>
+										<UsersTable users={users} options={options} onUserClick={this.selectUser} />
+									</div>
+								</div>
+							);
+
+							const forms = {
+								body: bodyForm,
+								header: headerForm
+							};
+
+
+              return (
+                <div>
+                  {forms[form.key]}
+                </div>
+              )
+            })}
+          </div>
+        }
+
+      </TransitionMotion>
 		);
-
-		const bodyForm = (
-			<div className="container-fluid">
-				<div className="page-header row">
-					<div onClick={onTitleClick} className='cursor col-md-3'>
-						<h1 className="text-left">Trombinoscope</h1>
-					</div>
-				</div>
-				<div className="res_containt">
-					<SearchBar
-						form="body"
-						firstName={first_name}
-						lastName={last_name} options={options}
-						structures={structures}
-						subStructures={subStructures}
-						selectedStructure={primary_struct}
-						selectedSecondaryStructure={secondary_struct}
-						onOptionCheck={this.swapOption}
-						onStructureSelect={this.requestSubStructures}
-						onSubmitIdentity={this.requestUsersByIdentity}
-						onSubmitStructures={this.requestUsersByStructures}
-						errors={errors}
-					/>
-					<UsersTable users={users} options={options} onUserClick={this.selectUser} />
-				</div>
-			</div>
-		);
-
-		// <ReactCSSTransitionGroup component='div' transitionName='anim' transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-			// <div key={0}>
-      	// {_.isEmpty(users) ? bodyForm : headerForm}
-      // </div>
-    // </ReactCSSTransitionGroup>
-
 		return (
 			<div>
-				<MediaQuery query='(min-width: 1240px)'>
-					{_.isEmpty(users) ? bodyForm : headerForm}
-				</MediaQuery>
-				<MediaQuery query='(max-width: 1239px)'>
-					{bodyForm}
-				</MediaQuery>
+				{animatedBodyForm}
 			</div>
 		);
 	}
