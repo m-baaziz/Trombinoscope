@@ -52,7 +52,7 @@ class Profile extends Component {
 			<div className="container-fluid">
 				<div className="page-header row">
 	        <div onClick={goTrombi} className='cursor col-md-3'>
-	          <h1 className="text-left">Trombinoscope</h1>
+	          <h1 className="text-left">Trombinoscope /</h1>
 	        </div>
 	        <div>
 	          <h1><small>{user.nom}</small></h1>
